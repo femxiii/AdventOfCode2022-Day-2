@@ -42,16 +42,26 @@ func main() {
 			currentGame.OpponentPlays = "Scissors"
 
 		}
-		//X for Rock, Y for Paper, and Z for Scissors
+
+		//X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win.
 		switch game[1] {
 		case "X":
-			currentGame.IPlay = "Rock"
-			currentGame.Points += 1
+			currentGame.IPlay = findMyHand(currentGame.OpponentPlays, false)
+
 		case "Y":
-			currentGame.IPlay = "Paper"
-			currentGame.Points += 2
+			currentGame.IPlay = currentGame.OpponentPlays
+
 		case "Z":
-			currentGame.IPlay = "Scissors"
+			currentGame.IPlay = findMyHand(currentGame.OpponentPlays, true)
+
+		}
+
+		switch currentGame.IPlay {
+		case "Rock":
+			currentGame.Points += 1
+		case "Paper":
+			currentGame.Points += 2
+		case "Scissors":
 			currentGame.Points += 3
 
 		}
@@ -89,6 +99,26 @@ func findResult(opp string, my string, currentPoints int) (outcome string, addpo
 		addpoints = currentPoints + 3
 	}
 	return outcome, addpoints
+
+}
+
+func findMyHand(opp string, win bool) (outcome string) {
+
+	handOptions := []string{"Rock", "Paper", "Scissors"}
+
+	// rotate array so opp hand is in the middle
+	for opp != handOptions[1] {
+		storeFirst := handOptions[0]
+		handOptions = handOptions[1:]
+		handOptions = append(handOptions, storeFirst)
+	}
+
+	outcome = handOptions[0]
+	if win {
+		outcome = handOptions[2]
+	}
+
+	return outcome
 
 }
 
